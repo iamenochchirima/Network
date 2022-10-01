@@ -1,5 +1,11 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-    TODO
+    {% for post in posts %}
+    <strong>{{post.author}}</strong>
+    <br>
+    <textarea name="#" id="#" cols="30" rows="10">{{ post.body }}</textarea><br>
+    At: {{ post.date }}
+    <br>
+    {% endfor %}
 {% endblock %}

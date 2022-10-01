@@ -1,0 +1,15 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+
+{% if posted %}
+ Succseful
+{% else %}
+<h2>Create a new post</h2>
+<form action="{% url 'create_post' %}" method = "POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input class="btn btn-secondary" type="submit" value="Post">
+</form>
+{% endif%}
+{% endblock %}

@@ -2,21 +2,18 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 
 from .forms import PostForm
 
 from .models import User, Post
 
-
 def index(request):
-
-    posts = Post.objects.all()
+    posts = Post.objects.all().order_by('-date')
     return render(request, "network/index.html", {
         "posts": posts
     })
-
 
 def login_view(request):
     if request.method == "POST":
@@ -70,24 +67,24 @@ def register(request):
         return render(request, "network/register.html")
 
 @login_required(login_url='login')
-def create_post_page(request):
-    return render(request, "network/create_post.html")
-
 def create_post(request):
-    posted = False
     if request.method == "POST":
         form = PostForm(request.POST)
         if form.is_valid():
             instance = form.save(commit=False)
             instance.author = request.user
             instance.save()
-            return HttpResponseRedirect("/create_post?posted=True")
+            return HttpResponseRedirect(reverse("index"))
     else:
         form = PostForm()
-        if "posted" in request.GET:
-            posted = True
     return render(request, "network/create_post.html", {
-        "posted": posted,
-        "form": form
+        "form": form,
     })
-         
+
+def profile(request, id):
+
+    details = get_object_or_404(Post, id=id)
+
+    return render(request, "network/profile_page.html", {
+        "details": details
+    })

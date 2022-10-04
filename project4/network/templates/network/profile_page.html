@@ -1,5 +1,35 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-  
+
+<div class="user-info">
+    <h1>{{ profile_user }}</h1>
+    <br><br>
+    Following: {{ following }}
+    Followers: {{ followers }}
+    <br>
+    {% if user != profile_user %}
+     <form action="{% url 'follow' %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="following_user" value="{{ user }}" readonly>
+        <input type="hidden" name="user_followed" value="{{ profile_user }}" readonly>
+        <input type="hidden" name="status" value="follow" readonly>
+        <button type="submit" class="btn profile-edit-btn">Follow</button>
+     </form>
+    {% endif %}
+    <br><br>
+
+</div>
+
+<div class="user-posts">
+    {% for post in posts %}
+    {% if post.author == profile_user %}
+    <strong>{{ post.author }}</strong>
+    <br>
+    <textarea name="#" id="#" cols="30" rows="10">{{ post.body }}</textarea><br>
+    At: {{ post.date }}
+    <br>
+    {% endif %}
+    {% endfor %}
+</div>
 {% endblock %}

@@ -7,7 +7,7 @@ from django.urls import reverse
 
 from .forms import PostForm
 
-from .models import User, Post
+from .models import User, Post, Follow
 
 def index(request):
     posts = Post.objects.all().order_by('-date')
@@ -81,10 +81,33 @@ def create_post(request):
         "form": form,
     })
 
-def profile(request, id):
+def profile(request, author):
 
-    details = get_object_or_404(Post, id=id)
+    posts  = Post.objects.all().order_by('-date')
+    user = get_object_or_404(User, username = author)
 
+    following = len(Follow.objects.filter(following_user=user))
+    followers = len(Follow.objects.filter(user_followed=user))
+    
     return render(request, "network/profile_page.html", {
-        "details": details
+        "posts": posts,
+        "profile_user": user,
+        "followers": followers,
+        "following": following
     })
+
+def follow(request):
+
+    if request.method == 'POST':
+        status = request.POST['status']
+        following_user = request.POST['following_user']
+        user_followed = request.POST['user_followed']
+        profile_user = request.POST['user_followed']
+        
+        following_user = get_object_or_404(User, username=following_user)
+        user_followed = get_object_or_404(User, username=user_followed)
+
+        if status == 'follow':
+            follow_count = Follow.objects.create(following_user=following_user, user_followed=user_followed)
+            follow_count.save()
+        return redirect('profile', profile_user)

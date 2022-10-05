@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, user_logged_in
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
@@ -86,14 +86,27 @@ def profile(request, author):
     posts  = Post.objects.all().order_by('-date')
     user = get_object_or_404(User, username = author)
 
+    logged_in_user = request.user
+
     following = len(Follow.objects.filter(following_user=user))
     followers = len(Follow.objects.filter(user_followed=user))
-    
+
+    user_followers = Follow.objects.filter(user_followed=user)
+    followers_list = []
+    for i in user_followers:
+        user_followers = i.following_user
+        followers_list.append(user_followers)
+    if logged_in_user in followers_list:
+        button_value = 'unfollow'
+    else:
+        button_value = 'follow'
+
     return render(request, "network/profile_page.html", {
         "posts": posts,
         "profile_user": user,
         "followers": followers,
-        "following": following
+        "following": following,
+        "button_value": button_value
     })
 
 def follow(request):
@@ -110,4 +123,16 @@ def follow(request):
         if status == 'follow':
             follow_count = Follow.objects.create(following_user=following_user, user_followed=user_followed)
             follow_count.save()
+        else:
+            follow_count = Follow.objects.get(following_user=following_user, user_followed=user_followed)
+            follow_count.delete()
         return redirect('profile', profile_user)
+
+def following(request):
+
+    user = request.user
+    post = Post.objects.filter(following__following_user=user)
+    print(post)
+    return render(request, "network/following_page.html", {
+
+    })

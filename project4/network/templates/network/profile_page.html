@@ -14,7 +14,14 @@
         <input type="hidden" name="following_user" value="{{ user }}" readonly>
         <input type="hidden" name="user_followed" value="{{ profile_user }}" readonly>
         <input type="hidden" name="status" value="follow" readonly>
+
+        {% if button_value == 'follow' %}
         <button type="submit" class="btn profile-edit-btn">Follow</button>
+        <input type="hidden" name="status" value="follow" readonly>
+        {% else  %}
+        <button type="submit" class="btn profile-edit-btn">Unfollow</button>
+        <input type="hidden" name="status" value="unfollow" readonly>
+        {% endif %}
      </form>
     {% endif %}
     <br><br>

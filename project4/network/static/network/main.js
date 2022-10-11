@@ -23,3 +23,22 @@ function posts() {
     })
 
 }
+
+function create_post(event) {
+    event.preventDefault()
+
+    document.querySelector('#posts_page').style.display = 'none';
+    document.querySelector('#following_page').style.display = 'none';
+    document.querySelector('#create_post').style.display = 'block';
+
+}
+
+function following(event) {
+
+    event.preventDefault()
+
+    document.querySelector('#posts_page').style.display = 'none';
+    document.querySelector('#following_page').style.display = 'block';
+    document.querySelector('#create_post').style.display = 'none';
+    
+}

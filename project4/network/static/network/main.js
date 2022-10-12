@@ -20,9 +20,30 @@ function posts() {
     
         console.log(posts);
     
-    })
+    posts.forEach(post => {
+        const element = document.createElement('div');
+        element.id = "element";
+        element.innerHTML = `
+        <button class="btn btn-light" id="name"><strong>${post['author_name']}</strong></button><br>
+        ${post['body']}<br>
+        <span>Likes: ${post['likes']}</span>
+        <span>${post['date']}</span>
+        `;
+
+        document.querySelector('#posts_page').append(element);
+
+        document.querySelector('#name').addEventListener('click', () => viewProfile(post['author_id']));
+
+        });
+
+    });
 
 }
+
+function viewProfile(author_id) {
+
+}
+
 
 function create_post(event) {
     event.preventDefault()

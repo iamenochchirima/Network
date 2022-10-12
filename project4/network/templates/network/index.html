@@ -2,10 +2,7 @@
 {% load static %}
 
 {% block body %}
- 
-{% if user.is_authenticated %}
 <div id="posts_page">
-    posts
 </div>
 
 <div id="following_page">
@@ -16,11 +13,6 @@
     <textarea class="form-control" id="compose-body" placeholder="Your post here"></textarea>
     <input type="submit" value="Post" class="btn btn-primary"/>
 </div>
-{% else %}
-<div id="posts_page">
-    posts
-</div>
-{% endif %}
 {% endblock %}
 
 {% block script %}

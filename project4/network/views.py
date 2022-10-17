@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate, login, logout, user_logged_in
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
+from django.core.paginator import Paginator
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
@@ -12,8 +13,13 @@ from .models import User, Post, Profile
 
 def index(request):
     posts = Post.objects.all().order_by('-date')
+
+    paginator = Paginator(posts, 5)
+    page = request.GET.get('page')
+    post = paginator.get_page(page)
+
     return render(request, "network/index.html", {
-        "posts": posts
+        "post": post
     })
 
 def login_view(request):
@@ -87,6 +93,10 @@ def profile(request, author):
     posts  = Post.objects.all().order_by('-date')
     user = get_object_or_404(User, username = author)
 
+    paginator = Paginator(posts, 5)
+    page = request.GET.get('page')
+    post = paginator.get_page(page)
+
     #logged_in_user = request.user
 
     #following = len(Profile.objects.filter(user=user))
@@ -103,7 +113,7 @@ def profile(request, author):
         #button_value = 'follow'
 
     return render(request, "network/profile_page.html", {
-        "posts": posts,
+        "post": post,
         "profile_user": user,
     })
 
@@ -134,7 +144,11 @@ def following(request):
     for user in currently_following:
         posts += (user.following.posts.all().order_by('-date'))
     print(posts)
+
+    paginator = Paginator(posts, 5)
+    page = request.GET.get('page')
+    post = paginator.get_page(page)
     
     return render(request, "network/following_page.html", {
-        "posts": posts
+        "post": post
     })

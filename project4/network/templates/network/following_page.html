@@ -1,7 +1,7 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-{% for post in posts %}
+{% for post in post %}
     <div class="post_item card ">
         <strong><a href="{% url 'profile' post.author %}">{{post.author}}</a></strong>
         {{ post.body }}<br>
@@ -9,4 +9,20 @@
         <br>
     </div>
     {% endfor %}
+
+    <center>
+        <hr><br>
+        {% if post.has_previous %}
+        <a id="first" href="?page=1">&laquo First</a>
+        <a id="priv" href="?page={{ post.previous_page_number }}">Previous</a>
+        {% endif %}
+        Page {{ post.number }} of {{ post.paginator.num_pages }}
+        {% if post.has_next %}
+        <a id="next" href="?page={{ post.next_page_number }}">Next</a>
+        <a id="last" href="?page={{ post.paginator.num_pages }}">Last &raquo</a>
+        {% endif %}
+        <br>
+        <br>
+    </center>
+
 {% endblock %}

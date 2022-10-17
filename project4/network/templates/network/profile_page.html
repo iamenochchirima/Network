@@ -1,0 +1,35 @@
+{% extends "network/layout.html" %}
+{% load static %}
+
+{% block body %}
+
+<div class="user-info">
+    <h1>{{ profile_user }}</h1>
+    <br><br>
+    Following: #
+    Followers: #
+    <br><br><br>
+    {% if user != profile_user %}
+     
+    {% endif %}
+
+</div>
+
+<div class="user-posts">
+    {% for post in posts %}
+    {% if post.author == profile_user %}
+    <div class="post_item card ">
+        <strong>{{ post.author }}</strong>
+        <br>
+        {{ post.body }}<br>
+        At: {{ post.date }}
+        <br>
+    </div>
+    {% endif %}
+    {% endfor %}
+</div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'network/main.js' %}"></script>
+{% endblock %}

@@ -1,20 +1,12 @@
 {% extends "network/layout.html" %}
-{% load static %}
 
 {% block body %}
-<div id="posts_page">
-</div>
-
-<div id="following_page">
-    following
-</div>
-
-<div id="create_post">
-    <textarea class="form-control" id="compose-body" placeholder="Your post here"></textarea>
-    <input type="submit" value="Post" class="btn btn-primary"/>
-</div>
-{% endblock %}
-
-{% block script %}
-    <script src="{% static 'network/main.js' %}"></script>
+    {% for post in posts %}
+    <div class="post_item card ">
+        <strong><a href="{% url 'profile' post.author %}">{{post.author}}</a></strong>
+        {{ post.body }}<br>
+        At: {{ post.date }}
+        <br>
+    </div>
+    {% endfor %}
 {% endblock %}

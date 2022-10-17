@@ -1,23 +1,20 @@
-import json
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, user_logged_in
+from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
-from django.http import JsonResponse
+from django.db.models import F
 
-from .models import User, Post
+from .forms import PostForm
 
+from .models import User, Post, Profile
 
 def index(request):
-    return render(request, "network/index.html")
-
-def all_posts(request):
-    
-    posts = Post.objects.all()
-    posts = posts.order_by("date").all()
-    return JsonResponse([post.serialize() for post in posts], safe=False)
-
+    posts = Post.objects.all().order_by('-date')
+    return render(request, "network/index.html", {
+        "posts": posts
+    })
 
 def login_view(request):
     if request.method == "POST":
@@ -70,5 +67,74 @@ def register(request):
     else:
         return render(request, "network/register.html")
 
+@login_required(login_url='login')
 def create_post(request):
-    pass
+    if request.method == "POST":
+        form = PostForm(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.author = request.user
+            instance.save()
+            return HttpResponseRedirect(reverse("index"))
+    else:
+        form = PostForm()
+    return render(request, "network/create_post.html", {
+        "form": form,
+    })
+
+def profile(request, author):
+
+    posts  = Post.objects.all().order_by('-date')
+    user = get_object_or_404(User, username = author)
+
+    #logged_in_user = request.user
+
+    #following = len(Profile.objects.filter(user=user))
+    #followers = len(Profile.objects.filter(followers=user))
+
+    #user_followers = Profile.objects.filter(followers=user)
+    #followers_list = []
+    #for i in user_followers:
+        #user_followers = i.following_user
+        #followers_list.append(user_followers)
+    #if logged_in_user in followers_list:
+        #button_value = 'unfollow'
+    #else:
+        #button_value = 'follow'
+
+    return render(request, "network/profile_page.html", {
+        "posts": posts,
+        "profile_user": user,
+    })
+
+def follow(request):
+
+    if request.method == 'POST':
+        status = request.POST['status']
+        following_user = request.POST['following_user']
+        user_followed = request.POST['user_followed']
+        profile_user = request.POST['user_followed']
+        
+        following_user = get_object_or_404(User, username=following_user)
+        user_followed = get_object_or_404(User, username=user_followed)
+
+        if status == 'follow':
+            follow_count = Profile.objects.create(following_user=following_user, user_followed=user_followed)
+            follow_count.save()
+        else:
+            follow_count = Profile.objects.get(following_user=following_user, user_followed=user_followed)
+            follow_count.delete()
+        return redirect('profile', profile_user)
+
+def following(request):
+    profile_user = User.objects.get(username=request.user)
+    currently_following = profile_user.following.all()
+   
+    posts = []
+    for user in currently_following:
+        posts += (user.following.posts.all().order_by('-date'))
+    print(posts)
+    
+    return render(request, "network/following_page.html", {
+        "posts": posts
+    })

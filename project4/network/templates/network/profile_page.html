@@ -6,11 +6,16 @@
 <div class="user-info">
     <h1>{{ profile_user }}</h1>
     <br><br>
-    Following: #
-    Followers: #
-    <br><br><br>
-    {% if user != profile_user %}
-     
+    Following: {{ following }}
+    Followers: {{ followers }}
+    <br><br>
+    {% if request.user != profile_user %}
+    {% if status == False %}
+        <button class="toggle" id="follow">Follow</button>
+    {% else %}
+        <button class="toggle" id="unfollow">Unfollow</button>
+    {% endif %}
+     <br><br>
     {% endif %}
 
 </div>
@@ -24,6 +29,9 @@
         {{ post.body }}<br>
         At: {{ post.date }}
         <br>
+        {% if request.user == post.author %}
+        <a href="#">Edit</a>
+        {% endif %}
     </div>
     {% endif %}
     {% endfor %}

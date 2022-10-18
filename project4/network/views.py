@@ -14,7 +14,7 @@ from .models import User, Post, Profile
 def index(request):
     posts = Post.objects.all().order_by('-date')
 
-    paginator = Paginator(posts, 5)
+    paginator = Paginator(posts, 10)
     page = request.GET.get('page')
     post = paginator.get_page(page)
 
@@ -92,27 +92,21 @@ def profile(request, author):
 
     posts  = Post.objects.all().order_by('-date')
     user = get_object_or_404(User, username = author)
+    viewing_user = User.objects.get(username=request.user)
 
-    paginator = Paginator(posts, 5)
+    paginator = Paginator(posts, 10)
     page = request.GET.get('page')
     post = paginator.get_page(page)
 
-    #logged_in_user = request.user
+    followers = user.followers.all().count()
+    following_cnt = user.following.all().count()
 
-    #following = len(Profile.objects.filter(user=user))
-    #followers = len(Profile.objects.filter(followers=user))
-
-    #user_followers = Profile.objects.filter(followers=user)
-    #followers_list = []
-    #for i in user_followers:
-        #user_followers = i.following_user
-        #followers_list.append(user_followers)
-    #if logged_in_user in followers_list:
-        #button_value = 'unfollow'
-    #else:
-        #button_value = 'follow'
+    status = len(Profile.objects.filter(user=viewing_user).filter(following=user))
 
     return render(request, "network/profile_page.html", {
+        "followers": followers,
+        "following": following_cnt,
+        "status": status,
         "post": post,
         "profile_user": user,
     })
@@ -142,10 +136,10 @@ def following(request):
    
     posts = []
     for user in currently_following:
-        posts += (user.following.posts.all().order_by('-date'))
-    print(posts)
+        posts += (user.following.posts.all())
+        posts.sort(key=lambda post: post.date, reverse=True)
 
-    paginator = Paginator(posts, 5)
+    paginator = Paginator(posts, 10)
     page = request.GET.get('page')
     post = paginator.get_page(page)
     

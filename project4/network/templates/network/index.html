@@ -7,6 +7,9 @@
         {{ post.body }}<br>
         At: {{ post.date }}
         <br>
+        {% if request.user == post.author %}
+        <a href="#">Edit</a>
+        {% endif %}
     </div>
     {% endfor %}
 

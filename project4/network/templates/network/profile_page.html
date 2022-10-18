@@ -7,13 +7,14 @@
     <h1>{{ profile_user }}</h1>
     <br><br>
     Following: {{ following }}
-    Followers: {{ followers }}
+    
+    Followers: <span class="following_count">{{ followers }}</span>
     <br><br>
     {% if request.user != profile_user %}
     {% if status == False %}
-        <button class="toggle" id="follow">Follow</button>
+        <button class="toggle-btn" id="follow-btn" value="{{ profile_user.username }}">Follow</button>
     {% else %}
-        <button class="toggle" id="unfollow">Unfollow</button>
+        <button class="toggle-btn" id="unfollow-btn" value="{{ profile_user.username }}">Unfollow</button>
     {% endif %}
      <br><br>
     {% endif %}

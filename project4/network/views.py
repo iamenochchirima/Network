@@ -2,7 +2,7 @@ from django.contrib.auth import authenticate, login, logout, user_logged_in
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.core.paginator import Paginator
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.db.models import F
@@ -87,11 +87,11 @@ def create_post(request):
     return render(request, "network/create_post.html", {
         "form": form,
     })
-
+@login_required(login_url='login')
 def profile(request, author):
 
     posts  = Post.objects.all().order_by('-date')
-    user = get_object_or_404(User, username = author)
+    user = get_object_or_404(User, username=author)
     viewing_user = User.objects.get(username=request.user)
 
     paginator = Paginator(posts, 10)
@@ -111,25 +111,6 @@ def profile(request, author):
         "profile_user": user,
     })
 
-def follow(request):
-
-    if request.method == 'POST':
-        status = request.POST['status']
-        following_user = request.POST['following_user']
-        user_followed = request.POST['user_followed']
-        profile_user = request.POST['user_followed']
-        
-        following_user = get_object_or_404(User, username=following_user)
-        user_followed = get_object_or_404(User, username=user_followed)
-
-        if status == 'follow':
-            follow_count = Profile.objects.create(following_user=following_user, user_followed=user_followed)
-            follow_count.save()
-        else:
-            follow_count = Profile.objects.get(following_user=following_user, user_followed=user_followed)
-            follow_count.delete()
-        return redirect('profile', profile_user)
-
 def following(request):
     profile_user = User.objects.get(username=request.user)
     currently_following = profile_user.following.all()
@@ -146,3 +127,24 @@ def following(request):
     return render(request, "network/following_page.html", {
         "post": post
     })
+
+def follow_unfollow(request, username):
+    
+    profile_user = get_object_or_404(User, username=username)
+    viewing_user = get_object_or_404( User, username=request.user)
+
+    following_cnt = (Profile.objects.filter(user=viewing_user).filter(following=profile_user))
+
+    if len(following_cnt):
+        following_cnt[0].delete()
+        return JsonResponse(
+            {"message": "Unfollowed",
+            "followers": profile_user.followers.all().count()})
+    else:
+        follow_cnt = Profile(user=request.user, following=profile_user)
+        follow_cnt.save()
+        return JsonResponse(
+            {"message": "Followed",
+            "followers": profile_user.followers.all().count()
+            
+            })

@@ -1,4 +1,5 @@
 {% extends "network/layout.html" %}
+{% load static %}
 
 {% block body %}
     {% for post in post %}
@@ -28,4 +29,7 @@
         <br>
     </center>
 
+{% endblock %}
+{% block script %}
+    <script src="{% static 'network/main.js' %}"></script>
 {% endblock %}

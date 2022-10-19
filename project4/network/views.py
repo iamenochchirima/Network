@@ -1,6 +1,8 @@
+import json
 from django.contrib.auth import authenticate, login, logout, user_logged_in
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
+from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
@@ -87,6 +89,26 @@ def create_post(request):
     return render(request, "network/create_post.html", {
         "form": form,
     })
+    
+@csrf_exempt
+def edit_post(request, post_id): 
+
+    post = Post.objects.get(id=post_id)
+    if (request.user != post.author):
+        return JsonResponse({"error": "User may only edit their own post"})
+
+    if request.method == "PUT":
+        data = (json.loads(request.body))
+        content = data.get("content")
+        post.body = content
+        post.save()
+        return JsonResponse({
+            "message": "Post successfully edited",
+            "content": post.body,
+        })
+    else:
+        return JsonResponse({"error": "PUT request required"}, status=400)
+
 @login_required(login_url='login')
 def profile(request, author):
 

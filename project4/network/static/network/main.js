@@ -1,9 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
-
+    
     const followButton = document.querySelector('.toggle-btn');
-    console.log(followButton)
     const followerCount = document.querySelector('.following_count');
-    console.log(followerCount)
 
     if (followButton) {
         followButton.addEventListener("click", (e) => {
@@ -25,6 +23,19 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
     }
+     
+
+    var edit_buttons = document.querySelectorAll('#edit-btn');
+    console.log(edit_buttons);
+
+    edit_buttons.forEach(edit_button => {
+        edit_button.addEventListener('click', () => {
+            document.querySelector('.post-edit').style.display = 'block';
+            document.querySelector('.original').style.display = 'none';
+
+            console.log("Finished this function");
+        });
+    }) 
        
 })
 

@@ -3,15 +3,28 @@
 
 {% block body %}
     {% for post in post %}
-    <div class="post_item card ">
+    <div class="post_item index_post ">
         <strong><a href="{% url 'profile' post.author %}">{{post.author}}</a></strong>
-        {{ post.body }}<br>
+        <div class="post-body">
+           <div class="original">{{ post.body }}</div>
+           <div class="post-edit display-hide">
+            <form action="#">
+                <div class="mb-3">
+                    <label class="form-label">Edit your post</label>
+                    <textarea class="form-control" rows="3">{{ post.body }}</textarea>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                  </div>
+            </form>
+           </div>
+        </div>
         At: {{ post.date }}
         <br>
         {% if request.user == post.author %}
-        <a href="#">Edit</a>
+        <button type="button" id="edit-btn" class="btn btn-outline-primary">Edit</button>
         {% endif %}
+        <hr>
     </div>
+    
     {% endfor %}
 
     <center>

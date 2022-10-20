@@ -22,7 +22,6 @@
         <br>
         <div class="like-post">
             <form>
-
                 {% if request.user in post.likes.all %}
                 <button class="btn btn-primary like-btn" id="unlike" value="{{post.id}}">Unlike</button>
                 {% else %}

@@ -2,12 +2,19 @@
 {% load static %}
 
 {% block body %}
+<center>
+    <br><br><br>
 <h2>Create a new post</h2>
+<br>
 <form action="{% url 'create_post' %}" method="POST">
     {% csrf_token %}
-    {{ form.body }}
-    <input class="btn btn-secondary" type="submit" value="Post">
+    <div class="createform">
+        {{ form.body }}
+    </div>
+    <br><br>
+    <input class="btn btn-primary" type="submit" value="Post">
 </form>
+</center>
 {% endblock %}
 {% block script %}
     <script src="{% static 'network/main.js' %}"></script>

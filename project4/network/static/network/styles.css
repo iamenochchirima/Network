@@ -1,3 +1,39 @@
+body {
+  background-color: #1D1B26;
+}
+body a {
+  text-decoration: none;
+  color: #b1eaeb;
+}
+
+nav {
+  margin: 0 25em 0 25em;
+}
+
+.body {
+  margin: 0 20em 0 20em;
+  color: #00C5C8;
+}
+.body .form-control {
+  background-color: #b1eaeb;
+  color: black;
+}
+.body #next {
+  padding: 0 1em 0 1em;
+  color: var(--primary-color);
+}
+.body #last {
+  color: var(--primary-color);
+}
+.body #first {
+  color: var(--primary-color);
+  padding: 0 1em 0 0;
+}
+.body #priv {
+  color: var(--primary-color);
+  padding: 0 1em 0 0;
+}
+
 .post-edit {
   display: none;
 }/*# sourceMappingURL=styles.css.map */

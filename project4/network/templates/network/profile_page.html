@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block body %}
-
+<center>
 <div class="user-info">
     <h1>{{ profile_user }}</h1>
     <br><br>
@@ -12,14 +12,15 @@
     <br><br>
     {% if request.user != profile_user %}
     {% if status == False %}
-        <button class="toggle-btn" id="follow-btn" value="{{ profile_user.username }}">Follow</button>
+        <button class="btn btn-primary toggle-btn" id="follow-btn" value="{{ profile_user.username }}">Follow</button>
     {% else %}
-        <button class="toggle-btn" id="unfollow-btn" value="{{ profile_user.username }}">Unfollow</button>
+        <button class="btn btn-primary toggle-btn" id="unfollow-btn" value="{{ profile_user.username }}">Unfollow</button>
     {% endif %}
      <br><br>
     {% endif %}
 
 </div>
+</center>
 
 <div class="user-posts">
     {% for post in post %}

@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block body %}
+<h2>All Posts Page</h2>
     {% for post in post %}
     <div class="post_item index_post" value="{{post.id}}">
         <strong><a href="{% url 'profile' post.author %}">{{post.author}}</a></strong>

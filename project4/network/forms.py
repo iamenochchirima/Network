@@ -10,5 +10,5 @@ class PostForm(ModelForm):
         fields = ['body']
 
         widgets = {
-            "body": forms.Textarea(attrs={'class': 'form-control col-md-5 col-lg-6'}),
+            "body": forms.Textarea(attrs={'class': 'form-control', 'rows':3}),
         }

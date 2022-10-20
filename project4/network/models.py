@@ -18,15 +18,8 @@ class Post(models.Model):
     date = models.DateTimeField(auto_now_add = True)
     likes = models.ManyToManyField("User", related_name="post_likes")
 
-    def serialize(self):
-        return {
-            "id": self.id,
-            "body": self.body,
-            "author_id": self.author.id,
-            "author_name": self.author.username,
-            "likes": self.likes.count(),
-            "date": self.date.strftime("%b %d %Y, %I:%M %p"),
-        }
-
     def __str__(self):
-        return f"{self.body} by {self.author} at {self.date}"
+        return f"{self.body} by {self.author} at {self.date}" 
+
+    def total_likes(self):
+        return self.likes.count()

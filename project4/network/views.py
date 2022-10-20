@@ -15,6 +15,7 @@ from .models import User, Post, Profile
 
 def index(request):
     posts = Post.objects.all().order_by('-date')
+    
 
     paginator = Paginator(posts, 10)
     page = request.GET.get('page')
@@ -93,7 +94,7 @@ def create_post(request):
 @csrf_exempt
 def edit_post(request, post_id): 
 
-    post = Post.objects.get(id=post_id)
+    post = get_object_or_404(Post, id=post_id)
     if (request.user != post.author):
         return JsonResponse({"error": "User may only edit their own post"})
 
@@ -109,12 +110,30 @@ def edit_post(request, post_id):
     else:
         return JsonResponse({"error": "PUT request required"}, status=400)
 
+@csrf_exempt
+@login_required(login_url='login')
+def post_like(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+
+    if request.user in post.likes.all():
+            post.likes.remove(request.user)
+            liked = False
+    else:
+        post.likes.add(request.user)
+        liked = True
+    return JsonResponse({
+        "message": "Post like successful!",
+        "likes": post.total_likes(),
+        "liked": liked,
+    })
+
+
 @login_required(login_url='login')
 def profile(request, author):
 
     posts  = Post.objects.all().order_by('-date')
     user = get_object_or_404(User, username=author)
-    viewing_user = User.objects.get(username=request.user)
+    viewing_user = get_object_or_404(User, username=request.user)
 
     paginator = Paginator(posts, 10)
     page = request.GET.get('page')

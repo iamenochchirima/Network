@@ -24,15 +24,27 @@
 <div class="user-posts">
     {% for post in post %}
     {% if post.author == profile_user %}
-    <div class="post_item card ">
-        <strong>{{ post.author }}</strong>
-        <br>
-        {{ post.body }}<br>
-        At: {{ post.date }}
+    <div class="post_item index_post">
+        <strong><a href="{% url 'profile' post.author %}">{{post.author}}</a></strong>
+        <div class="post-body" value="{{post.id}}">
+           <div class="original">{{ post.body }}</div>
+           <div class="post-edit">
+            <form>
+                <div class="mb-3">
+                    <label class="form-label">Edit your post</label>
+                    <textarea class="form-control" rows="3" required>{{ post.body }}</textarea>
+                    <button type="submit" class="btn btn-primary" value="{{post.id}}" >Save</button>
+                    <button type="submit" class="btn btn-primary cancel">Cancel</button>
+                  </div>
+            </form>
+           </div>
+           <div class="time">At: {{ post.date }}</div>
+        </div>
         <br>
         {% if request.user == post.author %}
-        <a href="#">Edit</a>
+        <button type="button" value="{{post.id}}" class="btn btn-outline-primary edit-btn">Edit</button>
         {% endif %}
+        <hr>
     </div>
     {% endif %}
     {% endfor %}

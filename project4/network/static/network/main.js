@@ -30,15 +30,13 @@ document.addEventListener('DOMContentLoaded', function() {
     edit_buttons.forEach(edit_button => {
         edit_button.addEventListener('click', (event) => {
 
-           let post_id = event.currentTarget.dataset.id;
-           let post_body = document.querySelector(`div[data-id="${post_id}"]`);
-           console.log(post_body);
+           let post_id = event.currentTarget.value;
+           let post_body = document.querySelector(`div[value="${post_id}"]`);
            let original_post = post_body.querySelector(".original");
            let post_edit = post_body.querySelector(".post-edit");
            let saveBtn = post_edit.querySelector("button");
-           let cancelBtn = post_edit.querySelector(".cancel")
-           let time = post_body.querySelector(".time")
-           console.log(time);
+           let cancelBtn = post_edit.querySelector(".cancel");
+           let time = post_body.querySelector(".time");
 
            post_edit.style.display = 'block';
            original_post.style.display = 'none';
@@ -83,5 +81,34 @@ document.addEventListener('DOMContentLoaded', function() {
        
 
     }) 
+
+    let like_buttons = document.querySelectorAll('.like-btn');
+    
+    like_buttons.forEach(like_button => {
+        like_button.addEventListener('click', (event) => {
+
+            event.preventDefault();
+
+            let post_id = event.currentTarget.value;
+            let post_body = document.querySelector(`div[value="${post_id}"]`);
+            let like_count = post_body.querySelector(".likes-count");
+            
+            fetch(`/post_like/${post_id}`)
+            .then(response => response.json())
+            .then(result => {
+                console.log(result);
+
+                like_count.textContent = result.likes;
+
+                if (like_button.innerHTML == "Like") {
+                    like_button.innerHTML = "Unlike";
+                }
+                else {
+                    like_button.innerHTML = "Like";
+                }
+            })
+  
+        })
+    })
        
 })

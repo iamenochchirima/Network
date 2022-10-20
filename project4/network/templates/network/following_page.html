@@ -2,12 +2,15 @@
 
 {% block body %}
 {% for post in post %}
-    <div class="post_item card ">
-        <strong><a href="{% url 'profile' post.author %}">{{post.author}}</a></strong>
-        {{ post.body }}<br>
-        At: {{ post.date }}
-        <br>
+<div class="post_item index_post">
+    <strong><a href="{% url 'profile' post.author %}">{{post.author}}</a></strong>
+    <div class="post-body" value="{{post.id}}">
+       <div class="original">{{ post.body }}</div>
+       <div class="time">At: {{ post.date }}</div>
     </div>
+    <br>
+    <hr>
+</div>
     {% endfor %}
 
     <center>

@@ -3,16 +3,16 @@
 
 {% block body %}
     {% for post in post %}
-    <div class="post_item index_post">
+    <div class="post_item index_post" value="{{post.id}}">
         <strong><a href="{% url 'profile' post.author %}">{{post.author}}</a></strong>
-        <div class="post-body" data-id="{{post.id}}">
+        <div class="post-body">
            <div class="original">{{ post.body }}</div>
            <div class="post-edit">
             <form>
                 <div class="mb-3">
                     <label class="form-label">Edit your post</label>
                     <textarea class="form-control" rows="3" required>{{ post.body }}</textarea>
-                    <button type="submit" class="btn btn-primary" data-id="{{post.id}}" >Save</button>
+                    <button type="submit" class="btn btn-primary" value="{{post.id}}">Save</button>
                     <button type="submit" class="btn btn-primary cancel">Cancel</button>
                   </div>
             </form>
@@ -20,8 +20,19 @@
            <div class="time">At: {{ post.date }}</div>
         </div>
         <br>
+        <div class="like-post">
+            <form>
+
+                {% if request.user in post.likes.all %}
+                <button class="btn btn-primary like-btn" id="unlike" value="{{post.id}}">Unlike</button>
+                {% else %}
+                <button class="btn btn-primary like-btn"  id="like" value="{{post.id}}">Like</button>
+                {% endif %}
+                <span class="likes-count">{{ post.total_likes }}</span> likes
+            </form>
+        </div>
         {% if request.user == post.author %}
-        <button type="button" data-id="{{post.id}}" class="btn btn-outline-primary edit-btn">Edit</button>
+        <button type="button" value="{{post.id}}" class="btn btn-outline-primary edit-btn">Edit</button>
         {% endif %}
         <hr>
     </div>

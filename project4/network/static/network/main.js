@@ -87,9 +87,9 @@ document.addEventListener('DOMContentLoaded', function() {
     like_buttons.forEach(like_button => {
         like_button.addEventListener('click', (event) => {
 
-            event.preventDefault();
-
-            let post_id = event.currentTarget.value;
+            console.log(like_button);
+            let post_id = like_button.id;
+            console.log(post_id);
             let post_body = document.querySelector(`div[value="${post_id}"]`);
             let like_count = post_body.querySelector(".likes-count");
             
@@ -100,11 +100,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 like_count.textContent = result.likes;
 
-                if (like_button.innerHTML == "Like") {
-                    like_button.innerHTML = "Unlike";
+                console.log(like_button.style.color);
+
+                if (like_button.style.color == "red") {
+                    like_button.style.color = "white";
                 }
                 else {
-                    like_button.innerHTML = "Like";
+                    like_button.style.color = "red";
                 }
             })
   

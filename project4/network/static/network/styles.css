@@ -1,5 +1,6 @@
 body {
   background-color: #1D1B26;
+  font-family: "Poppins";
 }
 body a {
   text-decoration: none;
@@ -13,10 +14,19 @@ nav {
 .body {
   margin: 0 20em 0 20em;
   color: #00C5C8;
+  font-family: "Poppins";
+}
+.body .post_item {
+  background-color: #343141;
+}
+.body .post_item .container {
+  margin: 1rem;
+  padding: 1rem 0 0 1rem;
 }
 .body .form-control {
   background-color: #b1eaeb;
   color: black;
+  width: 40rem;
 }
 .body #next {
   padding: 0 1em 0 1em;

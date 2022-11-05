@@ -5,6 +5,7 @@
 <h2>All Posts Page</h2>
     {% for post in post %}
     <div class="post_item index_post" value="{{post.id}}">
+        <div class="container">
         <strong><a href="{% url 'profile' post.author %}">{{post.author}}</a></strong>
         <div class="post-body">
            <div class="original">{{ post.body }}</div>
@@ -12,7 +13,7 @@
             <form>
                 <div class="mb-3">
                     <label class="form-label">Edit your post</label>
-                    <textarea class="form-control" rows="3" required>{{ post.body }}</textarea>
+                    <textarea class="form-control" rows="2" required>{{ post.body }}</textarea>
                     <button type="submit" class="btn btn-primary" value="{{post.id}}">Save</button>
                     <button type="submit" class="btn btn-primary cancel">Cancel</button>
                   </div>
@@ -24,9 +25,9 @@
         <div class="like-post">
             <form>
                 {% if request.user in post.likes.all %}
-                <button class="btn btn-primary like-btn" id="unlike" value="{{post.id}}">Unlike</button>
+                <i class="fa fa-heart like-btn" id="{{post.id}}" style="color:red"></i>
                 {% else %}
-                <button class="btn btn-primary like-btn"  id="like" value="{{post.id}}">Like</button>
+                <i class="fa fa-heart like-btn" id="{{post.id}}" style="color:white"></i>
                 {% endif %}
                 <span class="likes-count">{{ post.total_likes }}</span> likes
             </form>
@@ -35,6 +36,7 @@
         <button type="button" value="{{post.id}}" class="btn btn-outline-primary edit-btn">Edit</button>
         {% endif %}
         <hr>
+        </div>
     </div>
     
     {% endfor %}

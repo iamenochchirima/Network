@@ -5,6 +5,7 @@
 
 {% for post in post %}
 <div class="post_item index_post" value="{{post.id}}">
+    <div class="container">
     <strong><a href="{% url 'profile' post.author %}">{{post.author}}</a></strong>
     <div class="post-body">
        <div class="original">{{ post.body }}</div>
@@ -14,14 +15,15 @@
     <div class="like-post">
         <form>
             {% if request.user in post.likes.all %}
-            <button class="btn btn-primary like-btn" id="unlike" value="{{post.id}}">Unlike</button>
+            <i class="fa fa-heart like-btn" id="{{post.id}}" style="color:red"></i>
             {% else %}
-            <button class="btn btn-primary like-btn"  id="like" value="{{post.id}}">Like</button>
+            <i class="fa fa-heart like-btn" id="{{post.id}}" style="color:white"></i>
             {% endif %}
             <span class="likes-count">{{ post.total_likes }}</span> likes
         </form>
     </div>
     <hr>
+    </div>
 </div>
     {% endfor %}
 

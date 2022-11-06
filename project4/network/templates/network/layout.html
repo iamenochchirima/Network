@@ -32,10 +32,10 @@
                             <a class="nav-link" href="{% url 'following' %}">Following</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link" href="{% url 'create_post' %}">Create Post</a>
+                        </li>
+                        <li class="nav-item logout">
+                            <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
                         </li>
                     {% else %}
                         <li class="nav-item">

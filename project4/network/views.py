@@ -91,7 +91,7 @@ def create_post(request):
         "form": form,
     })
     
-
+@csrf_exempt
 def edit_post(request, post_id): 
 
     post = get_object_or_404(Post, id=post_id)
